@@ -1,9 +1,8 @@
 set clipboard=unnamed
 set switchbuf=useopen
+set nofoldenable
 " get back defaults for the following
 autocmd VimEnter * silent! unmap F
-syntax on
-color dracula
 " leader
 nmap <Space> <leader>
 let maplocalleader = "\<Tab>"
@@ -22,9 +21,9 @@ nnoremap n nzz
 nnoremap N Nzz
 nnoremap * *zz
 nnoremap # #zz
-nnoremap <C-J> :CtrlPLine<CR> 
+nnoremap <C-J> :CtrlPLine<CR>
 " style and indicators
-set number 
+set number
 set colorcolumn=120
 highlight ColorColumn ctermbg=8 guibg=Grey8
 " configure linters and fixers
@@ -46,6 +45,7 @@ let g:lightline.tab = {
 " configure pep8
 let g:autopep8_max_line_length=120
 let g:autopep8_disable_show_diff=1
+let g:autopep8_on_save = 1
 " configure CtrlP
 let g:ctrlp_extensions = ['line']
 if executable('rg')
@@ -62,4 +62,13 @@ if executable('pyls')
     \ 'cmd': {server_info->['pyls']},
     \ 'whitelist': ['python'],
     \ })
+endif
+if executable('solargraph')
+    " gem install solargraph
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'solargraph',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
+        \ 'initialization_options': {"diagnostics": "true"},
+        \ 'whitelist': ['ruby'],
+        \ })
 endif
